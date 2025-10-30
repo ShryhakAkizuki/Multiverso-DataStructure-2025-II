@@ -1,5 +1,5 @@
 #pragma once
-#include "DinamicArray.hpp"
+#include "DynamicArray.hpp"
 
 #include <cstdint>
 
@@ -15,8 +15,8 @@ public:
     glm::vec3 _posicion = glm::vec3(0.0f);
     glm::vec3 _color = glm::vec3(1.0f);
     
-    DinamicArray<Node*> _output;
-    DinamicArray<Node*> _input;
+    DynamicArray<Node*> _output;
+    DynamicArray<Node*> _input;
     
     // ----- Constructores -----
     Node() = default;                                                               // Constructor por defecto
@@ -26,8 +26,8 @@ public:
         _id(id), _level(level),
         _conexiones(num_outputs + num_inputs) {
         
-        _output = DinamicArray<Node*>(num_outputs);
-        _input = DinamicArray<Node*>(num_inputs);
+        _output = DynamicArray<Node*>(num_outputs);
+        _input = DynamicArray<Node*>(num_inputs);
     }
 
     Node(const Node& other) :                                                       // Constructor de copia
@@ -47,8 +47,8 @@ public:
             _conexiones = other._conexiones;
             _posicion = other._posicion;
             _color = other._color;
-            _output = other._output;  // DinamicArray maneja la copia
-            _input = other._input;    // DinamicArray maneja la copia
+            _output = other._output;  // DynamicArray maneja la copia
+            _input = other._input;    // DynamicArray maneja la copia
         }
         return *this;
     }

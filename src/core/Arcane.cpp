@@ -62,8 +62,8 @@ Arcane& Arcane::operator=(Arcane&& other) noexcept {
     return *this;
 }
 
-DinamicArray<glm::vec3> Arcane::getNodePositions() const {
-    DinamicArray<glm::vec3> positions;
+DynamicArray<glm::vec3> Arcane::getNodePositions() const {
+    DynamicArray<glm::vec3> positions;
     positions.reserve(_nodos.size());
     for (uint32_t i = 0; i < _nodos.size(); ++i) {
         positions.push_back(_nodos[i]._posicion);
@@ -71,8 +71,8 @@ DinamicArray<glm::vec3> Arcane::getNodePositions() const {
     return positions;
 }
 
-DinamicArray<glm::vec3> Arcane::getNodeColors() const {
-    DinamicArray<glm::vec3> colors;
+DynamicArray<glm::vec3> Arcane::getNodeColors() const {
+    DynamicArray<glm::vec3> colors;
     colors.reserve(_nodos.size());
     for (const auto& nodo : _nodos) {
         colors.push_back(nodo._color);
@@ -80,8 +80,8 @@ DinamicArray<glm::vec3> Arcane::getNodeColors() const {
     return colors;
 }
 
-DinamicArray<glm::mat4> Arcane::getArrowTransforms() const {
-    DinamicArray<glm::mat4> transforms;
+DynamicArray<glm::mat4> Arcane::getArrowTransforms() const {
+    DynamicArray<glm::mat4> transforms;
     transforms.reserve(_flechas.size());
     for (const auto& arrow : _flechas) {
         transforms.push_back(arrow._transform);
@@ -89,8 +89,8 @@ DinamicArray<glm::mat4> Arcane::getArrowTransforms() const {
     return transforms;
 }
 
-DinamicArray<glm::vec3> Arcane::getArrowColors() const {
-    DinamicArray<glm::vec3> colors;
+DynamicArray<glm::vec3> Arcane::getArrowColors() const {
+    DynamicArray<glm::vec3> colors;
     colors.reserve(_flechas.size());
     for (const auto& arrow : _flechas) {
         colors.push_back(arrow._color);
@@ -183,12 +183,12 @@ void Arcane::connectNodes() {
     const uint32_t MAX_ATTEMPTS = 8;
     const uint8_t MAX_CONN = 6;
 
-    DinamicArray<DinamicArray<Node*>> nodesByLevel(_niveles + 1);
+    DynamicArray<DynamicArray<Node*>> nodesByLevel(_niveles + 1);
     std::uniform_real_distribution<float> prob(0.0f, 1.0f);
 
     // ----- ORGANIZAR NODOS POR NIVEL -----
     for (uint32_t lvl = 0; lvl <= _niveles; ++lvl) {
-        nodesByLevel.push_back(DinamicArray<Node*>());
+        nodesByLevel.push_back(DynamicArray<Node*>());
     }
 
     // Agrupar nodos por nivel
@@ -232,7 +232,7 @@ void Arcane::connectNodes() {
                 if (targetLevel > _niveles) targetLevel = _niveles;
                 
                 // Obtener nodos del nivel destino
-                DinamicArray<Node*>& targetNodes = nodesByLevel[targetLevel];
+                DynamicArray<Node*>& targetNodes = nodesByLevel[targetLevel];
                 if (targetNodes.empty()) continue;
                 
                 // Seleccionar nodo destino aleatorio
@@ -272,7 +272,7 @@ void Arcane::connectNodes() {
                     
                     if (targetLevel > _niveles) targetLevel = _niveles;
                     
-                    DinamicArray<Node*>& targetNodes = nodesByLevel[targetLevel];
+                    DynamicArray<Node*>& targetNodes = nodesByLevel[targetLevel];
                     if (targetNodes.empty()) continue;
                     
                     std::uniform_int_distribution<uint32_t> pick(0, targetNodes.size() - 1);
@@ -312,7 +312,7 @@ void Arcane::connectNodes() {
                 int lvl = preferredLevels[pi];
                 if (lvl < 0 || lvl > static_cast<int>(_niveles)) continue;
                 
-                DinamicArray<Node*>& targetNodes = nodesByLevel[lvl];
+                DynamicArray<Node*>& targetNodes = nodesByLevel[lvl];
                 for (uint32_t t = 0; t < targetNodes.size() && !connected; ++t) {
                     Node* target = targetNodes[t];
                     if (target == &node) continue;
@@ -342,7 +342,7 @@ void Arcane::connectNodes() {
                 int lvl = preferredLevels[pi];
                 if (lvl < 0 || lvl > static_cast<int>(_niveles)) continue;
                 
-                DinamicArray<Node*>& sourceNodes = nodesByLevel[lvl];
+                DynamicArray<Node*>& sourceNodes = nodesByLevel[lvl];
                 for (uint32_t t = 0; t < sourceNodes.size() && !connected; ++t) {
                     Node* source = sourceNodes[t];
                     if (source == &node) continue;
@@ -361,8 +361,8 @@ void Arcane::connectNodes() {
     // ----- FASE 3: REFORZAR ÚLTIMO NIVEL -----
     if (_niveles > 0) {
         uint32_t sourceLevel = _niveles - 1;
-        DinamicArray<Node*>& sourceNodes = nodesByLevel[sourceLevel];
-        DinamicArray<Node*>& targetNodes = nodesByLevel[_niveles];
+        DynamicArray<Node*>& sourceNodes = nodesByLevel[sourceLevel];
+        DynamicArray<Node*>& targetNodes = nodesByLevel[_niveles];
         
         for (uint32_t j = 0; j < targetNodes.size(); ++j) {
             Node* target = targetNodes[j];
@@ -390,9 +390,9 @@ void Arcane::connectNodes() {
 
 void Arcane::assign3DPositions() {
     // Organizar nodos por nivel
-    DinamicArray<DinamicArray<Node*>> nodesByLevel(_niveles + 1);
+    DynamicArray<DynamicArray<Node*>> nodesByLevel(_niveles + 1);
     for (uint32_t lvl = 0; lvl <= _niveles; ++lvl) {
-        nodesByLevel.push_back(DinamicArray<Node*>());
+        nodesByLevel.push_back(DynamicArray<Node*>());
     }
     
     for (Node& node : _nodos) {
@@ -403,7 +403,7 @@ void Arcane::assign3DPositions() {
 
     // Asignar posiciones por nivel
     for (uint32_t level = 0; level <= _niveles; ++level) {
-        DinamicArray<Node*>& levelNodes = nodesByLevel[level];
+        DynamicArray<Node*>& levelNodes = nodesByLevel[level];
         
         if (levelNodes.empty()) continue;
         
@@ -473,33 +473,33 @@ void Arcane::assignArrowColors() {
     }
 }
 
-DinamicArray<const Node*> Arcane::findPath(uint32_t idOrigen, uint32_t idDestino) const {
+DynamicArray<const Node*> Arcane::findPath(uint32_t idOrigen, uint32_t idDestino) const {
     // Validar IDs
     if (idOrigen >= _nodos.size() || idDestino >= _nodos.size()) {
-        return DinamicArray<const Node*>();
+        return DynamicArray<const Node*>();
     }
 
     // Caso trivial
     if (idOrigen == idDestino) {
-        DinamicArray<const Node*> path;
+        DynamicArray<const Node*> path;
         path.push_back(&_nodos[idOrigen]);
         return path;
     }
 
     // Vector de padres (en lugar de std::vector<int>)
-    DinamicArray<int> parent(_nodos.size());
+    DynamicArray<int> parent(_nodos.size());
     for (uint32_t i = 0; i < _nodos.size(); ++i) {
         parent.push_back(-1);
     }
     
     // Vector de visitados (en lugar de std::vector<char>)
-    DinamicArray<bool> visited(_nodos.size());
+    DynamicArray<bool> visited(_nodos.size());
     for (uint32_t i = 0; i < _nodos.size(); ++i) {
         visited.push_back(false);
     }
     
-    // Queue manual usando DinamicArray (FIFO)
-    DinamicArray<uint32_t> queue;
+    // Queue manual usando DynamicArray (FIFO)
+    DynamicArray<uint32_t> queue;
     queue.push_back(idOrigen);
     visited[idOrigen] = true;
     
@@ -533,11 +533,11 @@ DinamicArray<const Node*> Arcane::findPath(uint32_t idOrigen, uint32_t idDestino
     
     // Si no se encontró camino
     if (!found) {
-        return DinamicArray<const Node*>();
+        return DynamicArray<const Node*>();
     }
     
     // ----- RECONSTRUIR CAMINO -----
-    DinamicArray<const Node*> path;
+    DynamicArray<const Node*> path;
     int current = static_cast<int>(idDestino);
     
     // Reconstruir de destino a origen
@@ -556,13 +556,13 @@ DinamicArray<const Node*> Arcane::findPath(uint32_t idOrigen, uint32_t idDestino
     return path;
 }
 
-DinamicArray<glm::vec3> Arcane::highlightPath(const DinamicArray<const Node*>& path, 
+DynamicArray<glm::vec3> Arcane::highlightPath(const DynamicArray<const Node*>& path, 
                                              glm::vec3 highlightColor) {
-    DinamicArray<glm::vec3> colors;
+    DynamicArray<glm::vec3> colors;
     colors.reserve(_flechas.size());
 
     // Guardar colores originales temporalmente
-    DinamicArray<glm::vec3> originalColors;
+    DynamicArray<glm::vec3> originalColors;
     originalColors.reserve(_flechas.size());
     for (const Arrow& arrow : _flechas) {
         originalColors.push_back(arrow._color);

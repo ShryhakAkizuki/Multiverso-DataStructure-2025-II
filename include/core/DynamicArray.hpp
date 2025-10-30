@@ -5,7 +5,7 @@
 #include <stdexcept>
 
 template<typename T>
-class DinamicArray {
+class DynamicArray {
 private:
     // ----- Atributos -----
     uint32_t _capacity = 0;
@@ -14,15 +14,15 @@ private:
 
 public:
     // ----- Constructores -----
-    DinamicArray() = default;                       // Constructor por defecto
+    DynamicArray() = default;                       // Constructor por defecto
 
-    explicit DinamicArray(uint32_t capacity) :      // Constructor con capacidad inicial
+    explicit DynamicArray(uint32_t capacity) :      // Constructor con capacidad inicial
     _capacity(capacity), 
     _size(0) {
         _data = std::make_unique<T[]>(_capacity);
     }
 
-    DinamicArray(std::initializer_list<T> init) :   // Constructor con lista de inicialización = {1, 2, ...}
+    DynamicArray(std::initializer_list<T> init) :   // Constructor con lista de inicialización = {1, 2, ...}
     _capacity(static_cast<uint32_t>(init.size())), 
     _size(static_cast<uint32_t>(init.size())) {
         
@@ -33,7 +33,7 @@ public:
         }
     }
 
-    DinamicArray(const DinamicArray& other) :       // Constructor de copia
+    DynamicArray(const DynamicArray& other) :       // Constructor de copia
     _capacity(other._capacity), 
     _size(other._size) {
         
@@ -43,7 +43,7 @@ public:
         }
     }
 
-    DinamicArray(DinamicArray&& other) noexcept :   // Constructor de movimiento
+    DynamicArray(DynamicArray&& other) noexcept :   // Constructor de movimiento
         _capacity(other._capacity),
         _size(other._size),
         _data(std::move(other._data)) {
@@ -53,10 +53,10 @@ public:
     }
 
     // ----- Destructor -----
-    ~DinamicArray() = default;
+    ~DynamicArray() = default;
 
     // ----- Operadores -----
-    DinamicArray& operator=(const DinamicArray& other) {        // Operador de asignación por copia
+    DynamicArray& operator=(const DynamicArray& other) {        // Operador de asignación por copia
         if(this != &other) {
             _capacity = other._capacity;
             _size = other._size;
@@ -68,7 +68,7 @@ public:
         return *this;
     }
 
-    DinamicArray& operator=(DinamicArray&& other) noexcept {    // Operador de asignación por movimiento
+    DynamicArray& operator=(DynamicArray&& other) noexcept {    // Operador de asignación por movimiento
         if(this != &other) {
             _capacity = other._capacity;
             _size = other._size;

@@ -1,7 +1,7 @@
 #pragma once
 #include "Node.hpp"
 #include "Arrow.hpp"
-#include "DinamicArray.hpp"
+#include "DynamicArray.hpp"
 
 #include <random>
 #include <cstdint>
@@ -13,8 +13,8 @@
 class Arcane {
 private:
     // ----- Atributos -----
-    DinamicArray<Node> _nodos;
-    DinamicArray<Arrow> _flechas;
+    DynamicArray<Node> _nodos;
+    DynamicArray<Arrow> _flechas;
     uint32_t _niveles = 0;
     std::mt19937 _gen;
 
@@ -40,15 +40,15 @@ public:
     uint32_t getNumArrows() const noexcept { return _flechas.size(); }
 
     // Algoritmos
-    DinamicArray<const Node*> findPath(uint32_t idOrigen, uint32_t idDestino) const;
-    DinamicArray<glm::vec3> highlightPath(const DinamicArray<const Node*>& path, 
+    DynamicArray<const Node*> findPath(uint32_t idOrigen, uint32_t idDestino) const;
+    DynamicArray<glm::vec3> highlightPath(const DynamicArray<const Node*>& path, 
                                             glm::vec3 highlightColor = glm::vec3(1.0f));
 
     // Datos para renderizado
-    DinamicArray<glm::vec3> getNodePositions() const;
-    DinamicArray<glm::vec3> getNodeColors() const;
-    DinamicArray<glm::mat4> getArrowTransforms() const;
-    DinamicArray<glm::vec3> getArrowColors() const;
+    DynamicArray<glm::vec3> getNodePositions() const;
+    DynamicArray<glm::vec3> getNodeColors() const;
+    DynamicArray<glm::mat4> getArrowTransforms() const;
+    DynamicArray<glm::vec3> getArrowColors() const;
     
 private:
     
