@@ -39,7 +39,7 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_SAMPLES, 8);
     
-    auto* window = glfwCreateWindow(1200, 800, "Arcane 3D Viewer", nullptr, nullptr);
+    auto* window = glfwCreateWindow(1920, 1080, "Arcane 3D Viewer", nullptr, nullptr);
     if (!window) {
         std::cerr << "Failed to create GLFW window\n";
         glfwTerminate();
